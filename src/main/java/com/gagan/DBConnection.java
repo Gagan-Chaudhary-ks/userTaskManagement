@@ -23,11 +23,19 @@ public class DBConnection {
 
             System.out.println("\n1. Insert User");
             System.out.println("2. View Users");
-            System.out.println("3. Exit");
+            System.out.println("3. Delete User");
+            System.out.println("4. Exit");
             System.out.print("Choose option: ");
 
-            int choice = sc.nextInt();
-            sc.nextLine();
+            int choice ;
+            if(sc.hasNextInt()){
+                choice = sc.nextInt();
+                sc.nextLine();
+            }else{
+                System.out.println("Invalid input. Please enter a number.");
+                sc.next();
+                continue;
+            }
 
             if (choice == 1) {
                 System.out.print("Enter name: ");
@@ -39,12 +47,32 @@ public class DBConnection {
                 UserService.insertUser(name, email);
 
             } else if (choice == 2) {
+                System.out.println("\n");
                 UserService.fetchUsers();
 
             } else if (choice == 3) {
-                break;
+                System.out.println("\n");
+            UserService.fetchUsers();
+            System.out.print("Enter user ID to delete: ");
+
+            if (sc.hasNextInt()) {
+                int id = sc.nextInt();
+                sc.nextLine();
+                UserService.deleteUser(id);
+            } else {
+                System.out.println("Invalid ID.");
+                sc.next();
             }
+
+        } else if (choice == 4) {
+
+            break;
         }
+          else{
+                System.out.println("Please choose a valid option !");
+                continue;
+            }
+    }
 
         sc.close();
     }
