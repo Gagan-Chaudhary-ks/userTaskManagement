@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBConnection {
+public class Application {
     private static final String URL = "jdbc:mysql://localhost:3306/user_task_db";
     private static final String USER = "root";
     private static final String PASSWORD = "Gaganjio@14";
@@ -17,7 +17,7 @@ public class DBConnection {
 
     public static void main(String[] args) throws SQLException {
 
-        Connection conn = DBConnection.getConnection();
+        Connection conn = Application.getConnection();
         Scanner sc = new Scanner(System.in);
 
         UserService userService = new UserService(conn, sc);
