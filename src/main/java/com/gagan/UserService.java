@@ -58,34 +58,36 @@ public class UserService {
     }
 
 
-    public static void deleteUser(int userId) {
+    public void deleteUser(int userId) {
+
         try {
-            Connection conn = DBConnection.getConnection();
 
             // Step 1: Delete tasks of that user
             String deleteTasks = "DELETE FROM tasks WHERE user_id = ?";
-            PreparedStatement pstmt1 = conn.prepareStatement(deleteTasks);
-            pstmt1.setInt(1, userId);
-            pstmt1.executeUpdate();
+            try (PreparedStatement pstmt1 = conn.prepareStatement(deleteTasks)) {
+                pstmt1.setInt(1, userId);
+                pstmt1.executeUpdate();
+            }
 
             // Step 2: Delete user
             String deleteUser = "DELETE FROM users WHERE id = ?";
-            PreparedStatement pstmt2 = conn.prepareStatement(deleteUser);
-            pstmt2.setInt(1, userId);
-            int rowsAffected = pstmt2.executeUpdate();
+            try (PreparedStatement pstmt2 = conn.prepareStatement(deleteUser)) {
+                pstmt2.setInt(1, userId);
+                int rowsAffected = pstmt2.executeUpdate();
 
-            if (rowsAffected > 0) {
-                System.out.println("User deleted successfully!");
-            } else {
-                System.out.println("User not found.");
+                if (rowsAffected > 0) {
+                    System.out.println("User deleted successfully!");
+                } else {
+                    System.out.println("User not found.");
+                }
             }
 
-            conn.close();
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("Error deleting user.");
             e.printStackTrace();
         }
     }
+
 
 
 }
