@@ -3,8 +3,17 @@ package com.gagan;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 public class UserService {
+
+    private Connection conn;
+    private Scanner sc;
+
+    public UserService(Connection conn, Scanner sc){
+     this.conn = conn;
+     this.sc = sc;
+    }
 
     public static void fetchUsers() {
         try {
