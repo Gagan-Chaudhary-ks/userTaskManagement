@@ -185,6 +185,64 @@ public class TaskService {
         }
     }
 
+    public void deleteTask() {
+
+        System.out.print("Enter user ID: ");
+        int userId = sc.nextInt();
+        sc.nextLine();
+
+        try {
+
+            // Validate user
+            if (!userExists(userId)) {
+                System.out.println("User not found.");
+                return;
+            }
+
+            // Print tasks
+            if (!printTasksByUser(userId)) {
+                System.out.println("No tasks found for this user.");
+                return;
+            }
+
+            System.out.print("Enter task ID to delete: ");
+            int taskId = sc.nextInt();
+            sc.nextLine();
+
+            // Validate ownership
+            if (!taskBelongsToUser(taskId, userId)) {
+                System.out.println("Invalid task ID for this user.");
+                return;
+            }
+
+            System.out.print("Are you sure you want to delete this task? (Y/N): ");
+            String confirm = sc.nextLine();
+
+            if (!confirm.equalsIgnoreCase("Y")) {
+                System.out.println("Deletion cancelled.");
+                return;
+            }
+
+            String query = "DELETE FROM tasks WHERE task_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+                ps.setInt(1, taskId);
+
+                int rows = ps.executeUpdate();
+
+                if (rows > 0) {
+                    System.out.println("Task deleted successfully.");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database error occurred while deleting task.");
+            e.printStackTrace();
+        }
+    }
+
+
 
     private boolean printTasksByUser(int userId) throws SQLException {
 
