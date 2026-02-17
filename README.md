@@ -72,8 +72,8 @@ Foreign key ensures referential integrity between users and tasks.
    ```sql
    CREATE DATABASE user_task_db;
    ```
-2. Create the required tables (users and tasks) inside the database. 
-3. Update database credentials inside Application.java. 
+2. Create the required tables (users and tasks) inside the database.
+3. Update database credentials inside Application.java before running the application. 
 4. Build the project using Maven:
 ```
 mvn clean install
