@@ -115,13 +115,14 @@ public class TaskService {
         }
     }
 
-    private boolean taskExists(int taskId) throws SQLException {
+    private boolean taskBelongsToUser(int taskId, int userId) throws SQLException {
 
-        String query = "SELECT task_id FROM tasks WHERE task_id = ?";
+        String query = "SELECT task_id FROM tasks WHERE task_id = ? AND user_id = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
 
             ps.setInt(1, taskId);
+            ps.setInt(2, userId);
 
             ResultSet rs = ps.executeQuery();
 
@@ -129,6 +130,8 @@ public class TaskService {
         }
     }
 
-
-
 }
+
+
+
+
