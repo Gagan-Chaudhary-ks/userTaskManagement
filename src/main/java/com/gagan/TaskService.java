@@ -3,6 +3,8 @@ package com.gagan;
 import java.sql.Connection;
 import java.util.Scanner;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class TaskService {
 
@@ -14,23 +16,15 @@ public class TaskService {
         this.sc = sc;
     }
 
-    private boolean userExists(int userId) {
-
+    private boolean userExists(int userId) throws SQLException {
         String query = "SELECT id FROM users WHERE id = ?";
 
-        try (var ps = conn.prepareStatement(query)) {
-
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, userId);
-
-            var rs = ps.executeQuery();
-
+            ResultSet rs = ps.executeQuery();
             return rs.next();
-
-        } catch (SQLException e) {
-            System.out.println("Error checking user existence.");
-            e.printStackTrace();
-            return false;
         }
     }
+
 
 }
