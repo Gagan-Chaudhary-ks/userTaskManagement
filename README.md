@@ -87,3 +87,10 @@ mvn exec:java
 
 ---
 
+## 🎯 Author
+
+Gagan Chaudhary  
+B.Tech (Electronics & Communication Engineering)  
+Aspiring Software Developer
+
+
