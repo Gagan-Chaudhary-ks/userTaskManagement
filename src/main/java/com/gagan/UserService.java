@@ -38,12 +38,11 @@ public class UserService {
     }
 
 
-    public static void insertUser(String name, String email) {
-        try {
-            Connection conn = DBConnection.getConnection();
+    public void insertUser(String name, String email) {
 
-            String query = "INSERT INTO users (name, email) VALUES (?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(query);
+        String query = "INSERT INTO users (name, email) VALUES (?, ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, name);
             pstmt.setString(2, email);
@@ -52,12 +51,12 @@ public class UserService {
 
             System.out.println("User inserted successfully!");
 
-            conn.close();
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("Error inserting user.");
             e.printStackTrace();
         }
     }
+
 
     public static void deleteUser(int userId) {
         try {
