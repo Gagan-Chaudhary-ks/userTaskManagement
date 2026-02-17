@@ -115,6 +115,20 @@ public class TaskService {
         }
     }
 
+    private boolean taskExists(int taskId) throws SQLException {
+
+        String query = "SELECT task_id FROM tasks WHERE task_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, taskId);
+
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next();
+        }
+    }
+
 
 
 }
