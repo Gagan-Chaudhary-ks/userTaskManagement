@@ -58,35 +58,56 @@ public class UserService {
     }
 
 
-    public void deleteUser(int userId) {
+    public void deleteUser() {
+        System.out.print("Enter User ID to delete: ");
+        int userId = sc.nextInt();
 
         try {
+            conn.setAutoCommit(false);
 
-            // Step 1: Delete tasks of that user
-            String deleteTasks = "DELETE FROM tasks WHERE user_id = ?";
-            try (PreparedStatement pstmt1 = conn.prepareStatement(deleteTasks)) {
-                pstmt1.setInt(1, userId);
-                pstmt1.executeUpdate();
-            }
-
-            // Step 2: Delete user
-            String deleteUser = "DELETE FROM users WHERE id = ?";
-            try (PreparedStatement pstmt2 = conn.prepareStatement(deleteUser)) {
-                pstmt2.setInt(1, userId);
-                int rowsAffected = pstmt2.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    System.out.println("User deleted successfully!");
-                } else {
+            String checkUser = "SELECT id FROM users WHERE id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(checkUser)) {
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
                     System.out.println("User not found.");
+                    conn.setAutoCommit(true);
+                    return;
                 }
             }
 
-        } catch (SQLException e) {
-            System.out.println("Error deleting user.");
+            String deleteTasks = "DELETE FROM tasks WHERE user_id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteTasks)) {
+                ps.setInt(1, userId);
+                ps.executeUpdate();
+            }
+
+            String deleteUser = "DELETE FROM users WHERE id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteUser)) {
+                ps.setInt(1, userId);
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+            System.out.println("User and associated tasks deleted successfully.");
+
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+                System.out.println("Transaction failed. Rolled back.");
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
             e.printStackTrace();
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
 
 
