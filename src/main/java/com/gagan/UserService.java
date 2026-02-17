@@ -60,7 +60,15 @@ public class UserService {
 
     public void deleteUser() {
         System.out.print("Enter User ID to delete: ");
+
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input.");
+            sc.nextLine();
+            return;
+        }
+
         int userId = sc.nextInt();
+        sc.nextLine();
 
         try {
             conn.setAutoCommit(false);

@@ -29,8 +29,15 @@ public class TaskService {
     public void addTask() {
 
         System.out.print("Enter user ID: ");
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input.");
+            sc.nextLine();
+            return;
+        }
+
         int userId = sc.nextInt();
-        sc.nextLine(); // consume newline
+        sc.nextLine();
+
 
         System.out.print("Enter task title: ");
         String title = sc.nextLine();
@@ -66,8 +73,15 @@ public class TaskService {
     public void viewTasksByUser() {
 
         System.out.print("Enter user ID: ");
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input.");
+            sc.nextLine();
+            return;
+        }
+
         int userId = sc.nextInt();
         sc.nextLine();
+
 
         try {
 
@@ -118,8 +132,15 @@ public class TaskService {
     public void updateTaskStatus() {
 
         System.out.print("Enter user ID: ");
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input.");
+            sc.nextLine();
+            return;
+        }
+
         int userId = sc.nextInt();
         sc.nextLine();
+
 
         try {
 
@@ -136,8 +157,15 @@ public class TaskService {
             }
 
             System.out.print("Enter task ID to update: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid input.");
+                sc.nextLine();
+                return;
+            }
+
             int taskId = sc.nextInt();
             sc.nextLine();
+
 
             // Validate ownership
             if (!taskBelongsToUser(taskId, userId)) {
@@ -150,8 +178,15 @@ public class TaskService {
             System.out.println("2. IN_PROGRESS");
             System.out.println("3. COMPLETED");
 
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid input.");
+                sc.nextLine();
+                return;
+            }
+
             int choice = sc.nextInt();
             sc.nextLine();
+
 
             String newStatus;
 
@@ -188,8 +223,15 @@ public class TaskService {
     public void deleteTask() {
 
         System.out.print("Enter user ID: ");
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input.");
+            sc.nextLine();
+            return;
+        }
+
         int userId = sc.nextInt();
         sc.nextLine();
+
 
         try {
 
@@ -206,8 +248,15 @@ public class TaskService {
             }
 
             System.out.print("Enter task ID to delete: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid input.");
+                sc.nextLine();
+                return;
+            }
+
             int taskId = sc.nextInt();
             sc.nextLine();
+
 
             // Validate ownership
             if (!taskBelongsToUser(taskId, userId)) {
