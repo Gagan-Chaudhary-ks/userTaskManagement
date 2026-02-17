@@ -115,6 +115,77 @@ public class TaskService {
         }
     }
 
+    public void updateTaskStatus() {
+
+        System.out.print("Enter user ID: ");
+        int userId = sc.nextInt();
+        sc.nextLine();
+
+        try {
+
+            // Validate user
+            if (!userExists(userId)) {
+                System.out.println("User not found.");
+                return;
+            }
+
+            // Print tasks
+            if (!printTasksByUser(userId)) {
+                System.out.println("No tasks found for this user.");
+                return;
+            }
+
+            System.out.print("Enter task ID to update: ");
+            int taskId = sc.nextInt();
+            sc.nextLine();
+
+            // Validate ownership
+            if (!taskBelongsToUser(taskId, userId)) {
+                System.out.println("Invalid task ID for this user.");
+                return;
+            }
+
+            System.out.println("Select new status:");
+            System.out.println("1. PENDING");
+            System.out.println("2. IN_PROGRESS");
+            System.out.println("3. COMPLETED");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            String newStatus;
+
+            switch (choice) {
+                case 1 -> newStatus = "PENDING";
+                case 2 -> newStatus = "IN_PROGRESS";
+                case 3 -> newStatus = "COMPLETED";
+                default -> {
+                    System.out.println("Invalid choice.");
+                    return;
+                }
+            }
+
+            String query = "UPDATE tasks SET status = ? WHERE task_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+                ps.setString(1, newStatus);
+                ps.setInt(2, taskId);
+
+                int rows = ps.executeUpdate();
+
+                if (rows > 0) {
+                    System.out.println("Task status updated successfully.");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database error occurred while updating task.");
+            e.printStackTrace();
+        }
+    }
+
+
     private boolean printTasksByUser(int userId) throws SQLException {
 
         String query = """
