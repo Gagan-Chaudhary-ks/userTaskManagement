@@ -15,9 +15,11 @@ public class DBConnection {
 }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
+        Connection conn = DBConnection.getConnection();
         Scanner sc = new Scanner(System.in);
+        UserService userService = new UserService(conn, sc);
 
         while (true) {
 
@@ -44,21 +46,21 @@ public class DBConnection {
                 System.out.print("Enter email: ");
                 String email = sc.nextLine();
 
-                UserService.insertUser(name, email);
+                userService.insertUser(name, email);
 
             } else if (choice == 2) {
                 System.out.println("\n");
-                UserService.fetchUsers();
+                userService.fetchUsers();
 
             } else if (choice == 3) {
                 System.out.println("\n");
-            UserService.fetchUsers();
+                userService.fetchUsers();
             System.out.print("Enter user ID to delete: ");
 
             if (sc.hasNextInt()) {
                 int id = sc.nextInt();
                 sc.nextLine();
-                UserService.deleteUser(id);
+                userService.deleteUser(id);
             } else {
                 System.out.println("Invalid ID.");
                 sc.next();

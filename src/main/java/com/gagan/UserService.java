@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.util.Scanner;
+import  java.sql.SQLException;
 
 public class UserService {
 
@@ -15,13 +16,12 @@ public class UserService {
      this.sc = sc;
     }
 
-    public static void fetchUsers() {
-        try {
-            Connection conn = DBConnection.getConnection();
+    public void fetchUsers() {
 
-            String query = "SELECT * FROM users";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
+        String query = "SELECT * FROM users";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -31,12 +31,12 @@ public class UserService {
                 System.out.println(id + " | " + name + " | " + email);
             }
 
-            conn.close();
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("Error fetching users.");
             e.printStackTrace();
         }
     }
+
 
     public static void insertUser(String name, String email) {
         try {
