@@ -115,6 +115,43 @@ public class TaskService {
         }
     }
 
+    private boolean printTasksByUser(int userId) throws SQLException {
+
+        String query = """
+            SELECT u.name, t.task_id, t.title, t.status
+            FROM tasks t
+            JOIN users u ON t.user_id = u.id
+            WHERE u.id = ?
+            """;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            boolean hasTasks = false;
+
+            while (rs.next()) {
+
+                if (!hasTasks) {
+                    String userName = rs.getString("name");
+                    System.out.println("Tasks for User: " + userName);
+                }
+
+                hasTasks = true;
+
+                System.out.println(
+                        "Task ID: " + rs.getInt("task_id") +
+                                " | Title: " + rs.getString("title") +
+                                " | Status: " + rs.getString("status")
+                );
+            }
+
+            return hasTasks;
+        }
+    }
+
+
     private boolean taskBelongsToUser(int taskId, int userId) throws SQLException {
 
         String query = "SELECT task_id FROM tasks WHERE task_id = ? AND user_id = ?";
